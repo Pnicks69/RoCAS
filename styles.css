@@ -87,6 +87,23 @@ body {
     border-color: var(--primary-color);
 }
 
+.input-group select {
+    width: 100%;
+    padding: 16px 16px 16px 48px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--input-background);
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: border-color 0.3s ease;
+    appearance: none;
+}
+
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
 .btn-primary {
     width: 100%;
     padding: 12px 24px;
