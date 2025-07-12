@@ -433,4 +433,14 @@ body {
     width: auto;
     margin: 0 auto 8px auto;
     filter: drop-shadow(0 2px 4px #18181888);
+}
+
+.accept-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.deny-btn {
+    background-color: #f44336;
+    color: white;
 } 
