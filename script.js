@@ -45,6 +45,9 @@ const cancelBtn = document.getElementById('cancelBtn');
 // History Logs
 const historyTableBody = document.getElementById('historyTableBody');
 
+// Key Requests
+const requestsTableBody = document.getElementById('requestsTableBody');
+
 // Authentication Functions
 function showError(message) {
     errorMessage.textContent = message;
@@ -146,6 +149,7 @@ if (!isLoginPage) {
             snapshot.forEach((doc) => {
                 const room = doc.data();
                 const row = document.createElement('tr');
+                
                 row.innerHTML = `
                     <td>${room.labName || 'Unnamed Lab'}</td>
                     <td>${room.building || 'Unknown Building'}</td>
@@ -170,6 +174,39 @@ if (!isLoginPage) {
 
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', () => deleteRoom(btn.dataset.id));
+            });
+        });
+    }
+
+    // Load key requests
+    function loadKeyRequests() {
+        db.collection('keyRequests')
+          .where('status', '==', 'pending')
+          .orderBy('requestedAt', 'desc')
+          .onSnapshot(snapshot => {
+            requestsTableBody.innerHTML = '';
+            snapshot.forEach(doc => {
+                const req = doc.data();
+                let dateStr = '';
+                if (req.requestedAt) {
+                    if (typeof req.requestedAt.toDate === 'function') {
+                        dateStr = new Date(req.requestedAt.toDate()).toLocaleString();
+                    } else {
+                        dateStr = new Date(req.requestedAt).toLocaleString();
+                    }
+                }
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${dateStr}</td>
+                    <td>${req.labName || ''}</td>
+                    <td>${req.requesterName || ''}</td>
+                    <td>${req.status || ''}</td>
+                    <td>
+                        <button class="action-btn accept-btn" onclick="acceptKeyRequest('${doc.id}', '${req.labId}', '${req.requesterName}')">Accept</button>
+                        <button class="action-btn deny-btn" onclick="denyKeyRequest('${doc.id}', '${req.requesterName}')">Deny</button>
+                    </td>
+                `;
+                requestsTableBody.appendChild(row);
             });
         });
     }
@@ -253,4 +290,53 @@ if (!isLoginPage) {
     // Initial load
     loadRooms();
     loadHistory();
-} 
+    loadKeyRequests();
+}
+
+// Global functions for key requests
+window.acceptKeyRequest = async function(requestId, labId, requesterName) {
+    try {
+        // Update lab status
+        await db.collection('labs').doc(labId).update({
+            status: 'Unavailable',
+            unavailableBy: requesterName,
+            keyHolder: requesterName,
+            keyTakenAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Update request status
+        await db.collection('keyRequests').doc(requestId).update({
+            status: 'accepted',
+            acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Add to history
+        const labDoc = await db.collection('labs').doc(labId).get();
+        await db.collection('keyHistory').add({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            instructorName: requesterName,
+            labName: labDoc.data().labName,
+            action: 'Request Accepted - Room Occupied'
+        });
+
+        alert('Key request accepted!');
+    } catch (error) {
+        console.error('Error accepting key request:', error);
+        alert('Error accepting key request. Please try again.');
+    }
+};
+
+window.denyKeyRequest = async function(requestId, requesterName) {
+    try {
+        await db.collection('keyRequests').doc(requestId).update({
+            status: 'denied',
+            deniedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Optionally, add to history
+        alert('Key request denied!');
+    } catch (error) {
+        console.error('Error denying key request:', error);
+        alert('Error denying key request. Please try again.');
+    }
+};
