@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoCAS Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="topnav">
+        <img src="assets/logo.png" alt="RoCAS" class="logo-img">
+        <div class="nav-links">
+            <a href="index.html" class="menu-item active">
+                <span class="material-icons">meeting_room</span>
+                Rooms
+            </a>
+            <a href="history.html" class="menu-item">
+                <span class="material-icons">history</span>
+                History Logs
+            </a>
+        </div>
+        <a href="#" class="menu-item logout-btn" id="logoutBtn">
+            <span class="material-icons">logout</span>
+            Logout
+        </a>
+    </div>
+    <div class="main-content">
+        <!-- Rooms Page -->
+        <div id="roomsPage" class="page active">
+            <div class="content-header">
+                <h2>Room Management</h2>
+                <button class="btn-primary add-btn" id="addRoomBtn">
+                    <span class="material-icons">add</span>
+                    Add Room
+                </button>
+            </div>
+
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Room Name</th>
+                            <th>Building</th>
+                            <th>Status</th>
+                            <th>Current User</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomsTableBody">
+                        <!-- Rooms will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pending Key Requests Table -->
+            <div class="card">
+                <h3>Pending Key Requests</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Requested At</th>
+                            <th>Room</th>
+                            <th>Requester</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTableBody">
+                        <!-- Requests will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Room Modal -->
+    <div id="roomModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Room</h3>
+                <button class="close-btn" id="closeModal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="roomForm">
+                <div class="input-group">
+                    <span class="material-icons">meeting_room</span>
+                    <input type="text" id="roomName" placeholder="Room Name" required>
+                </div>
+                <div class="input-group">
+                    <span class="material-icons">business</span>
+                    <select id="building" required>
+                        <option value="">Select Building</option>
+                        <option value="ACAD">ACAD</option>
+                        <option value="NCAS">NCAS</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-primary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoCAS Admin - History Logs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="topnav">
+        <img src="assets/logo.png" alt="RoCAS Logo" class="logo-img">
+        <div class="nav-links">
+            <a href="index.html" class="menu-item">
+                <span class="material-icons">meeting_room</span>
+                Rooms
+            </a>
+            <a href="history.html" class="menu-item active">
+                <span class="material-icons">history</span>
+                History Logs
+            </a>
+        </div>
+        <a href="#" class="menu-item logout-btn" id="logoutBtn">
+            <span class="material-icons">logout</span>
+            Logout
+        </a>
+    </div>
+    <div class="main-content">
+        <div class="page active">
+            <div class="content-header">
+                <h2>History Logs</h2>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Room</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- History logs will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
